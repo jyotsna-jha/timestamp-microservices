@@ -19,7 +19,7 @@ app.get("/", function (req, res) {
 });
 
 
-const isInvalidDate=(date)=>date.toUTCString="Invalid Date"
+const isInvalidDate=(date)=>date.toUTCString==="Invalid Date"
 
 // your first API endpoint... 
 app.get("/api/:date", function (req, res) {
