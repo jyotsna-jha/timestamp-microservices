@@ -18,34 +18,40 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
-const isInvalidDate=(date)=>date.toUTCString==="Invalid Date"
+// Helper function to check if a date is invalid
+const isInvalidDate = (date) => date.toString() === "Invalid Date";
 
 // your first API endpoint... 
 app.get("/api/:date", function (req, res) {
-  let date=new Date(req.params.date)
-  if(isInvalidDate(date)){
-    date=new Date(+req.params.date)
+  let dateString = req.params.date;
+  let date;
+
+  // Check if the input is a number (i.e., Unix timestamp)
+  if (!isNaN(dateString)) {
+    date = new Date(parseInt(dateString));
+  } else {
+    date = new Date(dateString);
   }
-  if(isInvalidDate(date)){
-    res.json({error:"Invalid Date"})
+
+  // Check if the date is invalid
+  if (isInvalidDate(date)) {
+    res.json({error: "Invalid Date"});
     return;
   }
+
   res.json({
-    unix:date.getTime(),
-    utc:date.toUTCString()
+    unix: date.getTime(),
+    utc: date.toUTCString()
   });
-  
 });
 
-app.get("/api",(req,res)=>{
+app.get("/api", (req, res) => {
+  const date = new Date();
   res.json({
-    unix:new Date().getTime(),
-    utc:new Date().toUTCString()
+    unix: date.getTime(),
+    utc: date.toUTCString()
   });
-})
-
-
+});
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
